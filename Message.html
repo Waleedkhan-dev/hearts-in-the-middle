@@ -123,7 +123,6 @@
   <div class="card">
     <h2>Send a Message from Dad 💙</h2>
     <div class="message-options">
-     
       <button onclick="sendMessage('A')" class="btn-a">A</button>
       <button onclick="sendMessage('B')" class="btn-a">B</button>
       <button onclick="sendMessage('C')" class="btn-a">C</button>
@@ -133,34 +132,30 @@
 
   <div id="popup" class="popup"></div>
 
- <div id="finalPopup" class="popup">Message from Dad: I'll talk soon, Love you. Dad</div> -->
+  <div id="finalPopup" class="popup">Message from Dad: I'll talk soon, Love you. Dad</div>
   <div id="finalResponse" class="popup">
     <div style="margin-bottom: 12px;">Reply to Dad?</div> 
-     <div class="final-options">
-      <button class="btn-b" onclick="sendMessage()">Miss you too</button>
-      <button class="btn-c" onclick="sendMessage()">Love you so much Dad</button>
-      <button class="btn-d" onclick="sendMessage()">Call me Dad</button>
-      <button class="btn-a" onclick="sendMessage()">Ok</button>
+    <div class="final-options">
+      <button class="btn-b" onclick="replyMessage('Miss you too')">Miss you too</button>
+      <button class="btn-c" onclick="replyMessage('Love you so much Dad')">Love you so much Dad</button>
+      <button class="btn-d" onclick="replyMessage('Call me Dad')">Call me Dad</button>
+      <button class="btn-a" onclick="replyMessage('Ok')">Ok</button>
     </div> 
   </div>
 
   <script>
     const messages = {
-      A: "I’m proud of you and I believe in you.",
+      A: "I'm proud of you and I believe in you.",
       B: "Every time you smile, it lights up my heart.",
-      C: "No matter what, I’m always on your side.",
-      D: "You’re doing great. Keep going, little champ."
+      C: "No matter what, I'm always on your side.",
+      D: "You're doing great. Keep going, little champ."
     };
 
     const recipientNumber = "+923267514362"; 
 
     function sendMessage(choice) {
-      console.log("choice ",choice);
-      
       const selectedMessage = messages[choice];
-      console.log("selectedMessage ",selectedMessage);
       
-
       fetch(`https://heartmessage.onrender.com/send-message`, {
         method: 'POST',
         headers: {
@@ -172,9 +167,7 @@
         })
       })
       .then(res => res.json())
-      .then(data => {console.log("data ",data);
-      
-        
+      .then(data => {
         const popup = document.getElementById('popup');
         if (data.success) {
           popup.textContent = `✅ Message sent successfully to ${recipientNumber}`;
@@ -186,27 +179,54 @@
 
           setTimeout(() => {
             document.getElementById('finalResponse').style.display = 'block';
-          }, 6000);
+          }, 3000);
         } else {
-          popup?.textContent = `❌ Failed to send: ${data.error}`;
-          popup?.style.display = 'block';
+          popup.textContent = `❌ Failed to send: ${data.error}`;
+          popup.style.display = 'block';
         }
       })
       .catch(err => {
-        console.log("err ",err);
-        
         const popup = document.getElementById('popup');
-        popup?.textContent = `❌ Network error: ${err.message}`;
-        popup?.style.display = 'block';
+        popup.textContent = `❌ Network error: ${err.message}`;
+        popup.style.display = 'block';
       });
     }
 
-    function endInteraction() {
-      document.getElementById('finalPopup').style.display = 'none';
-      document.getElementById('finalResponse').style.display = 'none';
-      document.getElementById('popup').style.display = 'none';
+    function replyMessage(message) {
+      fetch(`https://heartmessage.onrender.com/send-message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: recipientNumber,
+          message: message
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const popup = document.getElementById('popup');
+        if (data.success) {
+          popup.textContent = `✅ Reply sent successfully to ${recipientNumber}`;
+          popup.style.display = 'block';
+          
+          
+          setTimeout(() => {
+            document.getElementById('finalPopup').style.display = 'none';
+            document.getElementById('finalResponse').style.display = 'none';
+            popup.style.display = 'none';
+          }, 2000);
+        } else {
+          popup.textContent = `❌ Failed to send reply: ${data.error}`;
+          popup.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        const popup = document.getElementById('popup');
+        popup.textContent = `❌ Network error: ${err.message}`;
+        popup.style.display = 'block';
+      });
     }
   </script>
-
 </body>
 </html>
