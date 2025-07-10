@@ -151,7 +151,7 @@
       D: "You're doing great. Keep going, little champ."
     };
 
-    const recipientNumber = "+923267514362"; 
+    const recipientNumber = "+61410561610"; 
 
     function sendMessage(choice) {
       const selectedMessage = messages[choice];
@@ -170,7 +170,7 @@
       .then(data => {
         const popup = document.getElementById('popup');
         if (data.success) {
-          popup.textContent = `✅ Message sent successfully to ${recipientNumber}`;
+          popup.textContent = `✅ Message sent successfully to Mr. Brent `;
           popup.style.display = 'block';
 
           setTimeout(() => {
