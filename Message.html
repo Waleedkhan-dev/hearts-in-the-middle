@@ -132,15 +132,15 @@
 
   <div id="popup" class="popup"></div>
 
-  <div id="finalPopup" class="popup">Message from Dad: I'll talk soon, Love you. Dad</div>
-  <!-- <div id="finalResponse" class="popup">
-    <div style="margin-bottom: 12px;">Reply to Dad?</div> -->
-    <!-- <div class="final-options">
+ <div id="finalPopup" class="popup">Message from Dad: I'll talk soon, Love you. Dad</div> -->
+  <div id="finalResponse" class="popup">
+    <div style="margin-bottom: 12px;">Reply to Dad?</div> 
+     <div class="final-options">
       <button class="btn-b" onclick="endInteraction()">Miss you too</button>
       <button class="btn-c" onclick="endInteraction()">Love you so much Dad</button>
       <button class="btn-d" onclick="endInteraction()">Call me Dad</button>
       <button class="btn-a" onclick="endInteraction()">Ok</button>
-    </div> -->
+    </div> 
   </div>
 
   <script>
@@ -154,9 +154,13 @@
     const recipientNumber = "+61410561610"; 
 
     function sendMessage(choice) {
+      console.log("choice ",choice);
+      
       const selectedMessage = messages[choice];
+      console.log("selectedMessage ",selectedMessage);
+      
 
-      fetch('http://localhost:3000/send-message', {
+      fetch(`https://heartmessage.onrender.com/send-message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -167,7 +171,9 @@
         })
       })
       .then(res => res.json())
-      .then(data => {
+      .then(data => {console.log("data ",data);
+      
+        
         const popup = document.getElementById('popup');
         if (data.success) {
           popup.textContent = `✅ Message sent successfully to ${recipientNumber}`;
@@ -181,14 +187,16 @@
             document.getElementById('finalResponse').style.display = 'block';
           }, 6000);
         } else {
-          popup.textContent = `❌ Failed to send: ${data.error}`;
-          popup.style.display = 'block';
+          popup?.textContent = `❌ Failed to send: ${data.error}`;
+          popup?.style.display = 'block';
         }
       })
       .catch(err => {
+        console.log("err ",err);
+        
         const popup = document.getElementById('popup');
-        popup.textContent = `❌ Network error: ${err.message}`;
-        popup.style.display = 'block';
+        popup?.textContent = `❌ Network error: ${err.message}`;
+        popup?.style.display = 'block';
       });
     }
 
